@@ -7,27 +7,28 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <img src="logo.png" alt="GPTROLL Logo" class="logo" />
-    <h1>GPTROLL Meme Generator</h1>
-    <form id="memeForm">
-      <input type="file" id="imageInput" accept="image/*" required />
-      <input type="text" id="topText" placeholder="Top Text" />
-      <input type="text" id="bottomText" placeholder="Bottom Text" />
-      <button type="submit">Generate Meme</button>
-    </form>
-    <canvas id="memeCanvas" width="500" height="500"></canvas>
-    <a id="downloadLink" download="gptroll-meme.png">Download Meme</a>
-
-    <div class="gallery">
-      <h2>Meme Gallery</h2>
-      <div>
-        <button onclick="sortGallery('newest')">Sort by Newest</button>
-        <button onclick="sortGallery('oldest')">Sort by Oldest</button>
-      </div>
-      <div id="memeGallery">No memes yet. Be the first to troll the world!</div>
-    </div>
+  <h1>GPTROLL Meme Generator</h1>
+  
+  <div class="generator">
+    <input type="text" id="topText" placeholder="Top Text" />
+    <input type="text" id="bottomText" placeholder="Bottom Text" />
+    <input type="file" id="imageUpload" accept="image/*" />
+    <button onclick="drawMeme()">Generate Meme</button>
+    <canvas id="memeCanvas" width="400" height="400"></canvas>
+    <button id="downloadBtn" onclick="downloadMeme()">Download Meme</button>
+    <a id="shareButton" target="_blank" style="display: none;"><button>🚀 Share to X</button></a>
   </div>
+
+  <button onclick="toggleGallery()">Show/Hide Meme Gallery</button>
+
+  <section class="gallery" id="gallerySection" style="display: none;">
+    <h2>Meme Gallery</h2>
+    <div>
+      <button onclick="sortGallery('newest')">Sort by Newest</button>
+      <button onclick="sortGallery('oldest')">Sort by Oldest</button>
+    </div>
+    <div id="memeGallery" class="gallery-grid"></div>
+  </section>
 
   <script src="script.js"></script>
 </body>
