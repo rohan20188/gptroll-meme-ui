@@ -10,11 +10,11 @@ document.getElementById("memeForm").addEventListener("submit", function (e) {
   reader.onload = function (event) {
     const img = new Image();
     img.onload = function () {
-      // Draw the image
+      // Draw image
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-      // Set text properties
+      // Text properties
       ctx.font = "30px Impact";
       ctx.fillStyle = "white";
       ctx.strokeStyle = "black";
@@ -29,7 +29,7 @@ document.getElementById("memeForm").addEventListener("submit", function (e) {
       ctx.fillText(bottomText.toUpperCase(), canvas.width / 2, canvas.height - 20);
       ctx.strokeText(bottomText.toUpperCase(), canvas.width / 2, canvas.height - 20);
 
-      // Show download link
+      // Enable download link
       const link = document.getElementById("downloadLink");
       link.href = canvas.toDataURL();
       link.style.display = "inline";
