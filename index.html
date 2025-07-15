@@ -1,80 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GPTROLL Meme Generator</title>
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    body {
-      background-color: #111;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 20px;
-    }
-    .logo {
-      width: 200px;
-      margin-bottom: 10px;
-    }
-    input[type="text"] {
-      margin: 8px;
-      padding: 10px;
-      width: 60%;
-      max-width: 400px;
-      border-radius: 5px;
-      border: none;
-    }
-    input[type="file"] {
-      margin: 10px;
-    }
-    button {
-      padding: 10px 20px;
-      background-color: #00ff00;
-      color: #000;
-      font-weight: bold;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    canvas {
-      border: 2px solid #00ff00;
-      margin-top: 20px;
-    }
-    #downloadLink {
-      display: block;
-      margin-top: 10px;
-      color: #00ff00;
-      text-decoration: underline;
-    }
-  </style>
-</head>
 <body>
-  <!-- Logo -->
-  <img src="logo.png" alt="GPTROLL Logo" class="logo" />
+  <div class="background-watermark"></div>
 
-  <!-- Title -->
-  <h1>GPTROLL Meme Generator</h1>
+  <div class="container">
+    <img src="Logo.png" alt="GPTROLL Logo" class="logo" />
+    <h1>GPTROLL Meme Generator</h1>
+    <form id="memeForm">
+      <input type="file" id="imageInput" accept="image/*" required />
+      <input type="text" id="topText" placeholder="Top Text" />
+      <input type="text" id="bottomText" placeholder="Bottom Text" />
+      <button type="submit">Generate Meme</button>
+    </form>
+    <canvas id="memeCanvas" width="500" height="500"></canvas>
+    <a id="downloadLink" download="gptroll-meme.png">Download Meme</a>
+  </div>
 
-  <!-- Form -->
-  <form id="memeForm">
-    <input type="file" id="imageInput" accept="image/*" required />
-    <br />
-    <input type="text" id="topText" placeholder="Top Text" />
-    <br />
-    <input type="text" id="bottomText" placeholder="Bottom Text" />
-    <br />
-    <button type="submit">Generate Meme</button>
-  </form>
+  <footer class="footer">
+    © 2025 GPTROLL.IO — Trained on Chaos.
+  </footer>
 
-  <!-- Canvas -->
-  <canvas id="memeCanvas" width="500" height="500"></canvas>
-
-  <!-- Download Link -->
-  <a id="downloadLink" download="gptroll-meme.png">Download Meme</a>
-
-  <!-- Script -->
   <script src="script.js"></script>
 </body>
-</html>
