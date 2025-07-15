@@ -1,41 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>GPTROLL Meme Generator</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
-    <img src="logo.png" alt="GPTROLL Logo" class="logo" />
+    <img src="logo.png" alt="GPTROLL Logo" class="logo"/>
     <h1>GPTROLL Meme Generator</h1>
-
-    <div class="controls">
-      <input type="text" id="topText" placeholder="Top Text">
-      <input type="text" id="bottomText" placeholder="Bottom Text">
-      <input type="file" id="imageInput" accept="image/*">
-      <button id="generateBtn">Generate Meme</button>
+    <div class="input-group">
+      <input type="text" id="topText" placeholder="Top Text" />
+      <input type="text" id="bottomText" placeholder="Bottom Text" />
+      <input type="file" id="imageUpload" />
+      <button onclick="generateMeme()">Generate Meme</button>
     </div>
-
-    <canvas id="memeCanvas" width="500" height="500"></canvas>
-
-    <div class="actions">
-      <button id="downloadBtn">Download Meme</button>
-      <button id="toggleGalleryBtn">Show/Hide Meme Gallery</button>
+    <canvas id="memeCanvas" width="400" height="400"></canvas>
+    <div class="button-group">
+      <button onclick="downloadMeme()">Download Meme</button>
+      <button onclick="toggleGallery()">Show/Hide Meme Gallery</button>
     </div>
-
-    <div id="galleryContainer" class="hidden">
-      <h2>Meme Gallery</h2>
-      <div id="gallery" class="gallery-grid"></div>
-    </div>
-
-    <div id="leaderboardContainer">
-      <h2>Top Trolls Leaderboard</h2>
-      <ul id="leaderboard"></ul>
+    <div id="shareContainer"></div>
+    <div id="gallery" class="gallery hidden"></div>
+    <div id="leaderboard" class="leaderboard">
+      <h2>🏆 Troll Leaderboard</h2>
+      <ul id="leaderboardList"></ul>
     </div>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>
