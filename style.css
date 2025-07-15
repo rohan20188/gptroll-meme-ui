@@ -1,4 +1,3 @@
-/* General Reset */
 body {
   font-family: Arial, sans-serif;
   text-align: center;
@@ -14,21 +13,26 @@ body {
   margin-top: 40px;
   position: relative;
   z-index: 2;
+  border: 3px solid #00ff00;
+  border-radius: 12px;
+  padding: 25px;
+  max-width: 650px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #121212;
+  box-shadow: 0 0 30px #00ff00aa;
 }
 
-/* Logo Styling */
 .logo {
   width: 120px;
   margin-bottom: 10px;
 }
 
-/* Heading */
 h1 {
   font-size: 28px;
   margin-bottom: 20px;
 }
 
-/* Form Inputs */
 form input[type="file"],
 form input[type="text"] {
   padding: 10px;
@@ -44,7 +48,6 @@ form input[type="file"] {
   width: auto;
 }
 
-/* Generate Button */
 form button {
   padding: 10px 20px;
   background-color: #00ff00;
@@ -60,14 +63,12 @@ form button:hover {
   background-color: #00cc00;
 }
 
-/* Canvas Styling */
 canvas#memeCanvas {
   margin-top: 20px;
   border: 2px solid #00ff00;
   background-color: #111;
 }
 
-/* Download Link */
 a#downloadLink {
   display: block;
   margin-top: 15px;
@@ -80,7 +81,6 @@ a#downloadLink:hover {
   text-decoration: underline;
 }
 
-/* Footer */
 .footer {
   text-align: center;
   font-size: 12px;
@@ -91,7 +91,6 @@ a#downloadLink:hover {
   border-top: 1px solid #222;
 }
 
-/* Watermark Background */
 .background-watermark {
   background: url('Logo.png') center center no-repeat;
   background-size: 300px;
@@ -104,4 +103,3 @@ a#downloadLink:hover {
   z-index: 0;
   pointer-events: none;
 }
-
