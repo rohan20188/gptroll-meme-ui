@@ -1,112 +1,119 @@
-const memeForm = document.getElementById('memeForm');
 const canvas = document.getElementById('memeCanvas');
 const ctx = canvas.getContext('2d');
-const imageInput = document.getElementById('imageInput');
-const topTextInput = document.getElementById('topText');
-const bottomTextInput = document.getElementById('bottomText');
-const downloadLink = document.getElementById('downloadLink');
-const memeGallery = document.getElementById('memeGallery');
+let galleryMemes = JSON.parse(localStorage.getItem('galleryMemes')) || [];
 
-let galleryMemes = [];
+function drawMeme() {
+  const topText = document.getElementById('topText').value.toUpperCase();
+  const bottomText = document.getElementById('bottomText').value.toUpperCase();
+  const imageInput = document.getElementById('imageUpload').files[0];
 
-memeForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const file = imageInput.files[0];
-  if (!file) return;
+  if (!imageInput) return alert("Upload an image first!");
 
   const reader = new FileReader();
-  reader.onload = () => {
+  reader.onload = function () {
     const img = new Image();
-    img.onload = () => {
-      // 🖼️ Fixed canvas size
-      const MAX_WIDTH = 500;
-      const MAX_HEIGHT = 500;
-
-      canvas.width = MAX_WIDTH;
-      canvas.height = MAX_HEIGHT;
-
-      // 🔍 Scale image proportionally
-      const scale = Math.min(MAX_WIDTH / img.width, MAX_HEIGHT / img.height);
-      const newWidth = img.width * scale;
-      const newHeight = img.height * scale;
-      const dx = (MAX_WIDTH - newWidth) / 2;
-      const dy = (MAX_HEIGHT - newHeight) / 2;
-
-      ctx.clearRect(0, 0, MAX_WIDTH, MAX_HEIGHT);
-      ctx.drawImage(img, dx, dy, newWidth, newHeight);
-
-      // 📝 Draw top and bottom text
-      ctx.font = 'bold 30px Impact';
-      ctx.fillStyle = 'white';
-      ctx.strokeStyle = 'black';
+    img.onload = function () {
+      canvas.width = 400;
+      canvas.height = 400;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "white";
+      ctx.strokeStyle = "black";
       ctx.lineWidth = 2;
-      ctx.textAlign = 'center';
-
-      ctx.fillText(topTextInput.value, canvas.width / 2, 40);
-      ctx.strokeText(topTextInput.value, canvas.width / 2, 40);
-
-      ctx.fillText(bottomTextInput.value, canvas.width / 2, canvas.height - 20);
-      ctx.strokeText(bottomTextInput.value, canvas.width / 2, canvas.height - 20);
-
-      const url = canvas.toDataURL('image/png');
-      downloadLink.href = url;
-
-      saveToGallery(url);
+      ctx.font = "bold 20px Arial";
+      ctx.textAlign = "center";
+      ctx.fillText(topText, canvas.width / 2, 30);
+      ctx.strokeText(topText, canvas.width / 2, 30);
+      ctx.fillText(bottomText, canvas.width / 2, canvas.height - 10);
+      ctx.strokeText(bottomText, canvas.width / 2, canvas.height - 10);
+      saveToGallery(canvas.toDataURL("image/png"));
     };
     img.src = reader.result;
   };
-  reader.readAsDataURL(file);
-});
+  reader.readAsDataURL(imageInput);
+}
 
 function saveToGallery(imgData) {
-  const meme = {
-    id: Date.now(),
-    url: imgData,
-    likes: 0,
-    timestamp: new Date()
-  };
-  galleryMemes.unshift(meme);
-  updateGallery();
+  const uploadPreset = 'gptroll_unsigned';
+  const cloudName = 'your_cloud_name'; // Replace this with your actual Cloudinary name
+
+  const formData = new FormData();
+  formData.append('file', imgData);
+  formData.append('upload_preset', uploadPreset);
+
+  fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+    method: 'POST',
+    body: formData
+  })
+    .then(res => res.json())
+    .then(data => {
+      const hostedURL = data.secure_url;
+      const meme = {
+        id: Date.now(),
+        url: hostedURL,
+        likes: 0,
+        timestamp: new Date()
+      };
+      galleryMemes.unshift(meme);
+      localStorage.setItem('galleryMemes', JSON.stringify(galleryMemes));
+      updateGallery();
+
+      const tweetText = encodeURIComponent("🤣 Trolling with $GPTROLL – Join the meme chaos!");
+      const tweetURL = `https://twitter.com/intent/tweet?text=${tweetText}&url=${encodeURIComponent(hostedURL)}`;
+      const shareButton = document.getElementById('shareButton');
+      shareButton.href = tweetURL;
+      shareButton.style.display = 'inline-block';
+    })
+    .catch(err => console.error("Upload error:", err));
 }
 
 function updateGallery() {
-  if (galleryMemes.length === 0) {
-    memeGallery.innerHTML = 'No memes yet. Be the first to troll the world!';
-    return;
-  }
-
-  memeGallery.innerHTML = '';
+  const container = document.getElementById('memeGallery');
+  container.innerHTML = '';
   galleryMemes.forEach(meme => {
     const div = document.createElement('div');
-    div.className = 'gallery-item';
-    div.innerHTML = `
-      <img src="${meme.url}" alt="Meme" />
-      <div class="gallery-actions">
-        <span>${meme.likes} ❤️</span>
-        <button onclick="likeMeme(${meme.id})">Like</button>
-        <button onclick="deleteMeme(${meme.id})">Delete</button>
+    div.className = 'meme-item';
+    div.innerHTML = \`
+      <img src="\${meme.url}" />
+      <div class="meme-actions">
+        <button onclick="likeMeme(\${meme.id})">❤️ \${meme.likes}</button>
+        <button onclick="deleteMeme(\${meme.id})">🗑️</button>
       </div>
-    `;
-    memeGallery.appendChild(div);
+    \`;
+    container.appendChild(div);
   });
 }
 
 function likeMeme(id) {
   const meme = galleryMemes.find(m => m.id === id);
-  if (meme) meme.likes++;
-  updateGallery();
+  if (meme) {
+    meme.likes++;
+    localStorage.setItem('galleryMemes', JSON.stringify(galleryMemes));
+    updateGallery();
+  }
 }
 
 function deleteMeme(id) {
   galleryMemes = galleryMemes.filter(m => m.id !== id);
+  localStorage.setItem('galleryMemes', JSON.stringify(galleryMemes));
   updateGallery();
 }
 
 function sortGallery(order) {
-  galleryMemes.sort((a, b) => {
-    return order === 'newest'
-      ? b.timestamp - a.timestamp
-      : a.timestamp - b.timestamp;
-  });
+  galleryMemes.sort((a, b) => order === 'newest' ? b.id - a.id : a.id - b.id);
   updateGallery();
 }
+
+function toggleGallery() {
+  const gallery = document.getElementById('gallerySection');
+  gallery.style.display = gallery.style.display === 'none' ? 'block' : 'none';
+}
+
+function downloadMeme() {
+  const link = document.createElement('a');
+  link.download = 'gptroll-meme.png';
+  link.href = canvas.toDataURL();
+  link.click();
+}
+
+window.onload = updateGallery;
