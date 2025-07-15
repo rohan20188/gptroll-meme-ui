@@ -1,44 +1,131 @@
+/* style.css */
+
 body {
-  font-family: Arial, sans-serif;
+  background-color: #0e0e0e;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: white;
   text-align: center;
-  background: #111;
-  color: #fff;
   margin: 0;
   padding: 20px;
 }
 
-input, button {
-  margin: 5px;
+h1 {
+  font-size: 2em;
+  margin: 0.5em 0;
+}
+
+.logo {
+  width: 120px;
+  margin-bottom: 15px;
+}
+
+.container {
+  border: 2px solid lime;
+  border-radius: 15px;
+  box-shadow: 0 0 25px lime;
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+}
+
+input[type="file"],
+input[type="text"] {
   padding: 8px;
-  font-size: 16px;
+  margin: 5px;
+  width: 200px;
+  border-radius: 5px;
+  border: none;
+}
+
+button {
+  padding: 10px 15px;
+  background-color: lime;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  margin: 10px 5px;
+}
+
+button:hover {
+  background-color: #32cd32;
 }
 
 canvas {
-  display: block;
-  margin: 20px auto;
-  border: 2px solid #00ff00;
-  border-radius: 10px;
+  border: 2px solid lime;
+  margin-top: 10px;
+  background: #1a1a1a;
 }
 
-.gallery-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
+#gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
 }
 
-.meme-item {
+.gallery-item {
   position: relative;
+  border: 1px solid #555;
+  padding: 5px;
+  border-radius: 10px;
+  background: #111;
 }
 
-.meme-item img {
-  max-width: 150px;
-  border: 2px solid #00ff00;
-  border-radius: 8px;
+.gallery-item img {
+  width: 100%;
+  border-radius: 5px;
 }
 
-.meme-actions {
-  display: flex;
-  justify-content: space-around;
+.gallery-controls {
   margin-top: 5px;
+}
+
+.gallery-controls button {
+  margin: 2px;
+  background-color: #333;
+  color: white;
+}
+
+.gallery-controls button:hover {
+  background-color: crimson;
+}
+
+#leaderboard {
+  margin-top: 40px;
+  text-align: left;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  background: #1a1a1a;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid lime;
+}
+
+#leaderboard h2 {
+  text-align: center;
+  color: lime;
+}
+
+.leader-entry {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+  border-bottom: 1px solid #333;
+}
+
+.toggle-button {
+  background-color: #222;
+  border: 1px solid lime;
+  margin: 10px;
+}
+
+.share-btn {
+  background-color: #1DA1F2;
+  color: white;
+  margin-top: 10px;
+  padding: 6px 12px;
+  font-size: 0.9em;
 }
