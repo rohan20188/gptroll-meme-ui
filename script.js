@@ -1,147 +1,143 @@
-// script.js
-
-const topTextInput = document.getElementById("topText");
-const bottomTextInput = document.getElementById("bottomText");
-const imageInput = document.getElementById("imageInput");
+const topText = document.getElementById("topText");
+const bottomText = document.getElementById("bottomText");
+const imageUpload = document.getElementById("imageUpload");
 const generateBtn = document.getElementById("generateBtn");
 const downloadBtn = document.getElementById("downloadBtn");
-const canvas = document.getElementById("memeCanvas");
-const ctx = canvas.getContext("2d");
+const memeCanvas = document.getElementById("memeCanvas");
+const toggleGalleryBtn = document.getElementById("toggleGalleryBtn");
 const galleryContainer = document.getElementById("galleryContainer");
 const gallery = document.getElementById("gallery");
 const leaderboard = document.getElementById("leaderboard");
-const toggleGalleryBtn = document.getElementById("toggleGalleryBtn");
+const shareXBtn = document.getElementById("shareXBtn");
 
-let currentImage = null;
+const ctx = memeCanvas.getContext("2d");
+let uploadedImage = null;
 
-// Draw meme on canvas
-function drawMeme(image, topText, bottomText) {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+imageUpload.addEventListener("change", () => {
+  const reader = new FileReader();
+  reader.onload = function (event) {
+    const img = new Image();
+    img.onload = function () {
+      uploadedImage = img;
+      drawMeme();
+    };
+    img.src = event.target.result;
+  };
+  reader.readAsDataURL(imageUpload.files[0]);
+});
+
+function drawMeme() {
+  if (!uploadedImage) return;
+
+  memeCanvas.width = uploadedImage.width;
+  memeCanvas.height = uploadedImage.height;
+  ctx.clearRect(0, 0, memeCanvas.width, memeCanvas.height);
+  ctx.drawImage(uploadedImage, 0, 0);
 
   ctx.fillStyle = "white";
   ctx.strokeStyle = "black";
-  ctx.lineWidth = 2;
-  ctx.font = "bold 24px Arial";
+  ctx.lineWidth = 4;
+  ctx.font = "bold 40px Arial";
   ctx.textAlign = "center";
 
-  ctx.fillText(topText, canvas.width / 2, 40);
-  ctx.strokeText(topText, canvas.width / 2, 40);
+  ctx.fillText(topText.value.toUpperCase(), memeCanvas.width / 2, 50);
+  ctx.strokeText(topText.value.toUpperCase(), memeCanvas.width / 2, 50);
 
-  ctx.fillText(bottomText, canvas.width / 2, canvas.height - 20);
-  ctx.strokeText(bottomText, canvas.width / 2, canvas.height - 20);
+  ctx.fillText(bottomText.value.toUpperCase(), memeCanvas.width / 2, memeCanvas.height - 20);
+  ctx.strokeText(bottomText.value.toUpperCase(), memeCanvas.width / 2, memeCanvas.height - 20);
 }
 
-// Save meme to localStorage
-function saveMeme(dataURL) {
-  const memes = JSON.parse(localStorage.getItem("memes") || "[]");
-  memes.push({ url: dataURL, likes: 0 });
-  localStorage.setItem("memes", JSON.stringify(memes));
-  updateGallery();
-}
+generateBtn.addEventListener("click", drawMeme);
 
-// Generate meme
-generateBtn.addEventListener("click", () => {
-  if (!currentImage) return;
-  drawMeme(currentImage, topTextInput.value, bottomTextInput.value);
-  const dataURL = canvas.toDataURL();
-  saveMeme(dataURL);
-});
-
-// Handle image upload
-imageInput.addEventListener("change", () => {
-  const file = imageInput.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = () => {
-    const img = new Image();
-    img.onload = () => {
-      currentImage = img;
-      drawMeme(img, topTextInput.value, bottomTextInput.value);
-    };
-    img.src = reader.result;
-  };
-  reader.readAsDataURL(file);
-});
-
-// Download meme
 downloadBtn.addEventListener("click", () => {
   const link = document.createElement("a");
-  link.download = "meme.png";
-  link.href = canvas.toDataURL();
+  link.download = "gptroll_meme.png";
+  link.href = memeCanvas.toDataURL();
   link.click();
+  saveMemeToGallery(link.href);
 });
 
-// Toggle gallery
 toggleGalleryBtn.addEventListener("click", () => {
   galleryContainer.classList.toggle("hidden");
+  toggleGalleryBtn.textContent = galleryContainer.classList.contains("hidden")
+    ? "Show Meme Gallery"
+    : "Hide Meme Gallery";
 });
 
-// Update gallery
-function updateGallery() {
-  gallery.innerHTML = "";
+shareXBtn.addEventListener("click", () => {
+  const tweetText = encodeURIComponent("Check out this troll-worthy meme I just made with #GPTROLL 😈👾 → https://gptroll-meme-generator.vercel.app");
+  const tweetUrl = `https://twitter.com/intent/tweet?text=${tweetText}`;
+  window.open(tweetUrl, "_blank");
+});
+
+function saveMemeToGallery(dataURL) {
   const memes = JSON.parse(localStorage.getItem("memes") || "[]");
+  memes.push({ src: dataURL, likes: 0 });
+  localStorage.setItem("memes", JSON.stringify(memes));
+  displayGallery();
+  updateLeaderboard();
+}
+
+function displayGallery() {
+  const memes = JSON.parse(localStorage.getItem("memes") || "[]");
+  gallery.innerHTML = "";
   memes.forEach((meme, index) => {
-    const div = document.createElement("div");
-    div.className = "gallery-item";
+    const memeDiv = document.createElement("div");
+    memeDiv.className = "gallery-item";
 
     const img = document.createElement("img");
-    img.src = meme.url;
+    img.src = meme.src;
 
     const controls = document.createElement("div");
     controls.className = "gallery-controls";
 
     const likeBtn = document.createElement("button");
-    likeBtn.textContent = `👍 ${meme.likes}`;
+    likeBtn.innerText = `👍 ${meme.likes}`;
     likeBtn.onclick = () => {
-      memes[index].likes += 1;
+      meme.likes++;
       localStorage.setItem("memes", JSON.stringify(memes));
-      updateGallery();
+      displayGallery();
       updateLeaderboard();
     };
 
     const deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "🗑️";
+    deleteBtn.innerText = "🗑️";
     deleteBtn.onclick = () => {
       memes.splice(index, 1);
       localStorage.setItem("memes", JSON.stringify(memes));
-      updateGallery();
+      displayGallery();
       updateLeaderboard();
     };
 
     controls.appendChild(likeBtn);
     controls.appendChild(deleteBtn);
-    div.appendChild(img);
-    div.appendChild(controls);
-    gallery.appendChild(div);
+    memeDiv.appendChild(img);
+    memeDiv.appendChild(controls);
+    gallery.appendChild(memeDiv);
   });
 }
 
-// Update leaderboard
 function updateLeaderboard() {
-  leaderboard.innerHTML = "";
   const memes = JSON.parse(localStorage.getItem("memes") || "[]");
-  const leaderboardData = {};
+  const scores = {};
 
   memes.forEach((meme) => {
-    const user = "Anonymous"; // Placeholder for future user ID
-    if (!leaderboardData[user]) leaderboardData[user] = 0;
-    leaderboardData[user] += meme.likes;
+    const user = "User"; // Replace with real user ID or wallet later
+    scores[user] = (scores[user] || 0) + meme.likes;
   });
 
-  const sorted = Object.entries(leaderboardData)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 5);
+  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
 
+  leaderboard.innerHTML = "<h2>Leaderboard</h2>";
   sorted.forEach(([user, score]) => {
-    const li = document.createElement("li");
-    li.className = "leader-entry";
-    li.innerHTML = `<strong>${user}</strong><span>${score} Troll Points</span>`;
-    leaderboard.appendChild(li);
+    const entry = document.createElement("div");
+    entry.className = "leader-entry";
+    entry.innerHTML = `<span>${user}</span><span>${score} Troll Points</span>`;
+    leaderboard.appendChild(entry);
   });
 }
 
-// Initial load
-updateGallery();
-updateLeaderboard();
+window.onload = () => {
+  displayGallery();
+  updateLeaderboard();
+};
