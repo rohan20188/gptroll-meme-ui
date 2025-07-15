@@ -2,42 +2,34 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>GPTROLL Meme Generator</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
-    <!-- Logo -->
     <img src="logo.png" alt="GPTROLL Logo" class="logo" />
-
-    <!-- Title -->
     <h1>GPTROLL Meme Generator</h1>
-
-    <!-- Meme Generator Form -->
     <form id="memeForm">
       <input type="file" id="imageInput" accept="image/*" required />
       <input type="text" id="topText" placeholder="Top Text" />
       <input type="text" id="bottomText" placeholder="Bottom Text" />
       <button type="submit">Generate Meme</button>
     </form>
-
-    <!-- Canvas for Meme Preview -->
     <canvas id="memeCanvas" width="500" height="500"></canvas>
-
-    <!-- Download Link -->
     <a id="downloadLink" download="gptroll-meme.png">Download Meme</a>
 
-    <!-- Meme Gallery Section -->
     <div class="gallery">
       <h2>Meme Gallery</h2>
-      <p>No memes yet. Be the first to troll the world!</p>
-      <button onclick="document.getElementById('memeForm').scrollIntoView()" class="glow-button">
-        Generate Your First Meme
-      </button>
+      <div>
+        <button onclick="sortGallery('newest')">Sort by Newest</button>
+        <button onclick="sortGallery('oldest')">Sort by Oldest</button>
+      </div>
+      <div id="memeGallery">No memes yet. Be the first to troll the world!</div>
     </div>
   </div>
 
   <script src="script.js"></script>
 </body>
 </html>
+
