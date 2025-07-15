@@ -2,23 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GPTROLL Meme Generator</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>GPTROLL Meme Generator</h1>
-    <form id="memeForm">
-      <input type="text" id="username" placeholder="Enter your username" required />
-      <input type="file" id="imageInput" accept="image/*" required />
-      <button type="submit">Generate Meme</button>
-    </form>
-    <div id="previewContainer">
-      <h2>Preview</h2>
-      <img id="memePreview" src="#" alt="Your Meme" />
-    </div>
-  </div>
+  <h1>GPTROLL Meme Generator</h1>
+  <form id="memeForm">
+    <input type="file" id="imageInput" accept="image/*" required /><br />
+    <input type="text" id="topText" placeholder="Top text" /><br />
+    <input type="text" id="bottomText" placeholder="Bottom text" /><br />
+    <button type="submit">Generate Meme</button>
+  </form>
+  <canvas id="memeCanvas" width="500" height="500" style="display: none;"></canvas>
+  <br />
+  <a id="downloadLink" style="display: none;" download="gptroll-meme.png">Download Meme</a>
+
   <script src="script.js"></script>
 </body>
 </html>
