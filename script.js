@@ -18,10 +18,24 @@ memeForm.addEventListener('submit', (e) => {
   reader.onload = () => {
     const img = new Image();
     img.onload = () => {
-      canvas.width = img.width;
-      canvas.height = img.height;
-      ctx.drawImage(img, 0, 0);
+      // 🖼️ Fixed canvas size
+      const MAX_WIDTH = 500;
+      const MAX_HEIGHT = 500;
 
+      canvas.width = MAX_WIDTH;
+      canvas.height = MAX_HEIGHT;
+
+      // 🔍 Scale image proportionally
+      const scale = Math.min(MAX_WIDTH / img.width, MAX_HEIGHT / img.height);
+      const newWidth = img.width * scale;
+      const newHeight = img.height * scale;
+      const dx = (MAX_WIDTH - newWidth) / 2;
+      const dy = (MAX_HEIGHT - newHeight) / 2;
+
+      ctx.clearRect(0, 0, MAX_WIDTH, MAX_HEIGHT);
+      ctx.drawImage(img, dx, dy, newWidth, newHeight);
+
+      // 📝 Draw top and bottom text
       ctx.font = 'bold 30px Impact';
       ctx.fillStyle = 'white';
       ctx.strokeStyle = 'black';
