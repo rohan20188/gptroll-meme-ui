@@ -1,31 +1,56 @@
 body {
-  font-family: Arial, sans-serif;
-  background-color: #121212;
-  color: white;
   margin: 0;
-  padding: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #0d0d0d;
+  color: #fff;
   text-align: center;
 }
-h1 {
-  margin-top: 30px;
+
+.container {
+  padding: 30px;
 }
-form {
-  margin-top: 20px;
+
+.logo {
+  width: 120px;
+  margin-bottom: 20px;
 }
-input[type="text"], input[type="file"] {
+
+form input[type="file"],
+form input[type="text"],
+form button {
+  margin: 10px;
   padding: 10px;
-  margin: 5px;
-  width: 300px;
-}
-button {
-  padding: 10px 20px;
-  margin-top: 10px;
-  background-color: #ff007f;
-  color: white;
+  font-size: 16px;
+  border-radius: 5px;
   border: none;
-  cursor: pointer;
 }
+
+form input[type="text"] {
+  width: 60%;
+  background: #111;
+  color: #0f0;
+  border: 1px solid #333;
+}
+
+form button {
+  background: #0f0;
+  color: #000;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+form button:hover {
+  background: #0c0;
+}
+
 canvas {
   margin-top: 20px;
-  border: 1px solid #fff;
+  border: 2px solid #0f0;
+}
+
+#downloadLink {
+  display: none;
+  margin-top: 20px;
+  font-weight: bold;
+  color: #0f0;
 }
