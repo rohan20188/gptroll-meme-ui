@@ -1,37 +1,59 @@
-document.getElementById("memeForm").addEventListener("submit", function (e) {
-  e.preventDefault();
-  const imageInput = document.getElementById("imageInput");
-  const topText = document.getElementById("topText").value;
-  const bottomText = document.getElementById("bottomText").value;
-  const canvas = document.getElementById("memeCanvas");
-  const ctx = canvas.getContext("2d");
+const memeForm = document.getElementById("memeForm");
+const imageInput = document.getElementById("imageInput");
+const topText = document.getElementById("topText");
+const bottomText = document.getElementById("bottomText");
+const memeCanvas = document.getElementById("memeCanvas");
+const downloadLink = document.getElementById("downloadLink");
+
+const ctx = memeCanvas.getContext("2d");
+let image = new Image();
+
+imageInput.addEventListener("change", function () {
+  const file = imageInput.files[0];
+  if (!file) return;
+
   const reader = new FileReader();
-
-  reader.onload = function (event) {
-    const img = new Image();
-    img.onload = function () {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-      ctx.font = "30px Impact";
-      ctx.fillStyle = "white";
-      ctx.strokeStyle = "black";
-      ctx.lineWidth = 2;
-      ctx.textAlign = "center";
-
-      ctx.fillText(topText.toUpperCase(), canvas.width / 2, 50);
-      ctx.strokeText(topText.toUpperCase(), canvas.width / 2, 50);
-
-      ctx.fillText(bottomText.toUpperCase(), canvas.width / 2, canvas.height - 20);
-      ctx.strokeText(bottomText.toUpperCase(), canvas.width / 2, canvas.height - 20);
-
-      const link = document.getElementById("downloadLink");
-      link.href = canvas.toDataURL();
-      link.style.display = "inline";
+  reader.onload = function () {
+    image.onload = () => {
+      drawMeme();
     };
-    img.src = event.target.result;
+    image.src = reader.result;
   };
-
-  reader.readAsDataURL(imageInput.files[0]);
+  reader.readAsDataURL(file);
 });
+
+memeForm.addEventListener("submit", function (e) {
+  e.preventDefault();
+  if (image.src) {
+    drawMeme();
+  }
+});
+
+function drawMeme() {
+  // Clear canvas
+  ctx.clearRect(0, 0, memeCanvas.width, memeCanvas.height);
+
+  // Draw image
+  ctx.drawImage(image, 0, 0, memeCanvas.width, memeCanvas.height);
+
+  // Style for text
+  ctx.fillStyle = "white";
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 3;
+  ctx.font = "bold 30px Impact";
+  ctx.textAlign = "center";
+
+  // Draw top text
+  ctx.strokeText(topText.value, memeCanvas.width / 2, 40);
+  ctx.fillText(topText.value, memeCanvas.width / 2, 40);
+
+  // Draw bottom text
+  ctx.strokeText(bottomText.value, memeCanvas.width / 2, memeCanvas.height - 20);
+  ctx.fillText(bottomText.value, memeCanvas.width / 2, memeCanvas.height - 20);
+
+  // Set download link
+  const dataURL = memeCanvas.toDataURL("image/png");
+  downloadLink.href = dataURL;
+  downloadLink.style.display = "block"; // Make sure it's visible
+}
 
